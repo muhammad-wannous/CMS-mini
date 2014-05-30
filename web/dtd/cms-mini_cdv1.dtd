@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+This file is used for exchanging course inormation among LMSs.
+We use it in conjunction with IMS Enterprise xml file.
+For use with cms-mini the name of this file should be included in the xml file like this:
+...
+<group>
+.
+.
+<extension>{filename}</extension>
+</group>
+.
+.
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE course SYSTEM "course_description.dtd">
+
+    <course>
+    ...
+    </course>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT course (comments?,sourcedid,grouptype,instructor,semester,description,org,url?,credits,level,schedule,prerequisites, textbook+,grading,outcomes,topics)>
+
+<!--- Comment about the course -->
+<!ELEMENT comments (#PCDATA)>
+
+<!--- Identification of the course. -->
+<!ELEMENT sourcedid (source,id)>
+
+<!--- Where the id is obtained from. -->
+<!ELEMENT source (#PCDATA)>
+
+<!--- The unique ID of the course. Usually Faculty code + Dep. Code + Course Code.-->
+<!ELEMENT id (#PCDATA)>
+
+<!--- Types of the course Blended|Laboratory|Mixed-->
+<!ELEMENT grouptype (#PCDATA)>
+
+<!--- The name of the instructor-->
+<!ELEMENT instructor (#PCDATA)>
+
+<!--- The semester Q1|Q2|Q3-->
+<!ELEMENT semester (#PCDATA)>
+
+<!--- Short and long descriptions of the course -->
+<!ELEMENT description (short,long)>
+
+<!ELEMENT short (#PCDATA)>
+
+<!--- Catalog description of the course. -->
+<!ELEMENT long (#PCDATA)>
+
+<!--- Where this course is delivered -->
+<!ELEMENT org (orgname,orgunit,type,id)>
+
+<!--- University -->
+<!ELEMENT orgname (#PCDATA)>
+
+<!--- Faculty -->
+<!ELEMENT orgunit (#PCDATA)>
+
+<!--- Academic -->
+<!ELEMENT type (#PCDATA)>
+
+<!--- Google drive where the course contents are saved. -->
+<!ELEMENT url (#PCDATA)>
+
+<!ELEMENT credits (#PCDATA)>
+
+<!--- Graduate or Undergraduate. -->
+<!ELEMENT level (#PCDATA)>
+
+<!--- The schedule of the course -->
+<!ELEMENT schedule (daytime)+>
+
+<!--- Date and time. -->
+<!ELEMENT daytime (day, fromtime,totime)>
+
+<!--- Week day -->
+<!ELEMENT day (#PCDATA)>
+
+<!--- Start time -->
+<!ELEMENT fromtime (#PCDATA)>
+
+<!--- End time -->
+<!ELEMENT totime (#PCDATA)>
+
+<!--- prerequisites -->
+<!ELEMENT prerequisites (#PCDATA)>
+
+<!--- The text book reference for the course. -->
+<!ELEMENT textbook (author, title, edition, isbn)>
+
+<!ELEMENT author (#PCDATA)>
+
+<!ELEMENT title (#PCDATA)>
+
+<!ELEMENT edition (#PCDATA)>
+
+<!ELEMENT isbn (#PCDATA)>
+
+<!--- How gardes are distributed. -->
+<!ELEMENT grading (grade)*>
+
+<!ELEMENT grade (#PCDATA)>
+<!ATTLIST grade
+    percentage CDATA #REQUIRED
+  >
+
+<!--- Outcomes of the course. -->
+<!ELEMENT outcomes (outcome)*>
+
+<!--- One outcome. -->
+<!ELEMENT outcome (#PCDATA)>
+
+<!--- Topics of the course. -->
+<!ELEMENT topics (topic)*>
+
+<!--- One topic. -->
+<!ELEMENT topic (#PCDATA)>
+<!ATTLIST topic
+    chapters CDATA #REQUIRED
+  >

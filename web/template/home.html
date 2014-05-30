@@ -1,0 +1,164 @@
+<!--
+This is the User Interface template for CMSmini.
+Created on : Feb 25, 2014, 1:51:10 PM
+Author: Muhammad WANNOUS
+-->
+<div id="logoArea">
+  <table data-role="none" class="noBorder">
+    <tr>
+      <td class="solidRoundEdges"><img src="images/Logo.png" alt="Shin-logo" height="96" width="160"></td>
+      <td class="hiddenRightAlignment">
+        <table data-role="none" class="noBorder" style="float: right;">
+          <tr>
+            <td  id="inUserID"></td>
+          </tr>
+          <tr>
+            <td><a id="logLink" rel="external"></a></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+<hr class="wide">
+<table data-role="none" class="noBorderFixed">
+  <tr>
+    <td class="body">
+      <section>
+        <article>
+          <header><h2 class="Helvetica" id="courseTitle"></h2></header>
+          <section>
+            <div data-role="collapsible" class="ui-nodisc-icon ui-alt-icon">
+              <h3 class="Helvetica">General Information</h3>
+              <table class="noBorder">
+                <tr><th>Course Name:</th><td id="courseName"></td></tr>
+                <tr><th>Course Number:</th><td id="courseID"></td></tr>
+                <tr><th>Department:</th><td id="courseDep"></td></tr>
+                <tr><th>Instructor:</th><td id="courseInstructor"></td></tr>
+                <tr><th>Semester:</th><td id="courseSemester"></td></tr>
+                <tr><th>Credits:</th><td id="courseCredits"></td></tr>
+                <tr><th>Level:</th><td id="courseLevel"></td></tr>
+                <tr><th>Schedule:</th><td id="courseSche"></td></tr>
+                <tr><th>URL:</th><td id="courseURL"></td></tr>
+                <tr><th>Prerequisites:</th><td id="coursePre"></td></tr>
+                <tr>
+                  <th>Text:</th>
+                  <td id="courseText"></td>
+                </tr>
+                <tr>
+                  <th>Grading</th>
+                  <td>
+                    <ul>
+                      <li id="grade1"></li>
+                      <li id="grade2"></li>
+                      <li id="grade3"></li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </section>
+          <section>
+            <div data-role="collapsible" class="ui-nodisc-icon ui-alt-icon">
+              <h3 class="Helvetica">Catalog Description</h3>
+              <p class="Helvetica" id="catalogueDes"></p>
+            </div>
+          </section>
+          <section>
+            <div data-role="collapsible" class="ui-nodisc-icon ui-alt-icon">
+              <h3 class="Helvetica">Course Objectives</h3>
+              <p class="Helvetica">
+                At the completion of the course, students will be able to:
+              </p>
+              <ul class="Helvetica">
+                <li id="outCome1"></li>
+                <li id="outCome2"></li>
+                <li id="outCome3"></li>
+                <li id="outCome4"></li>
+                <li id="outCome5"></li>
+                <li id="outCome6"></li>
+                <li id="outCome7"></li>
+                <li id="outCome8"></li>
+                <li id="outCome9"></li>
+                <li id="outCome10"></li>
+              </ul>
+            </div>
+          </section>
+          <section>
+            <div data-role="collapsible" class="ui-nodisc-icon ui-alt-icon">
+              <h3 class="Helvetica">Table of Contents</h3>
+              <table class="noBorder">
+                <tr><th>Index</th><th>Topic</th><th>Chapter</th></tr>
+                <tr><td>1</td><td id="topic1"></td><td id="chap1"></td></tr>
+                <tr><td>2</td><td id="topic2"></td><td id="chap2"></td></tr>
+                <tr><td>3</td><td id="topic3"></td><td id="chap3"></td></tr>
+                <tr><td>4</td><td id="topic4"></td><td id="chap4"></td></tr>
+                <tr><td>5</td><td id="topic5"></td><td id="chap5"></td></tr>
+                <tr><td>6</td><td id="topic6"></td><td id="chap6"></td></tr>
+                <tr><td>7</td><td id="topic7"></td><td id="chap7"></td></tr>
+                <tr><td>8</td><td id="topic8"></td><td id="chap8"></td></tr>
+                <tr><td>9</td><td id="topic9"></td><td id="chap9"></td></tr>
+                <tr><td>10</td><td id="topic10"></td><td id="chap10"></td></tr>
+                <tr><td>11</td><td id="topic11"></td><td id="chap11"></td></tr>
+                <tr><td>12</td><td id="topic12"></td><td id="chap12"></td></tr>
+                <tr><td>13</td><td id="topic13"></td><td id="chap13"></td></tr>
+                <tr><td>14</td><td id="topic14"></td><td id="chap14"></td></tr>
+                <tr><td>15</td><td id="topic15"></td><td id="chap15"></td></tr>
+                <tr><td>16</td><td id="topic16"></td><td id="chap16"></td></tr>
+                <tr><td>17</td><td id="topic17"></td><td id="chap17"></td></tr>
+                <tr><td>18</td><td id="topic18"></td><td id="chap18"></td></tr>
+                <tr><td>19</td><td id="topic19"></td><td id="chap19"></td></tr>
+                <tr><td>20</td><td id="topic20"></td><td id="chap20"></td></tr>
+              </table>
+            </div>
+          </section>
+          <section>
+            <div id="contentsTab" data-role="collapsible" class="ui-nodisc-icon ui-alt-icon">
+              <h3 class="Helvetica">Resources</h3>
+            </div>
+          </section>
+        </article>
+      </section>
+    </td>
+    <td class="menu">
+      <aside  id="sideMenu">
+        <table class="noBorder">
+          <tr>
+            <td id="menuItem1"></td>
+          </tr>
+          <tr>
+            <td id="menuItem2"></td>
+          </tr>
+          <tr>
+            <td id="menuItem3"></td>
+          </tr>
+          <tr>
+            <td id="menuItem4"></td>
+          </tr>
+          <tr>
+            <td id="menuItem5"></td>
+          </tr>
+          <tr>
+            <td id="menuItem6"></td>
+          </tr>
+          <tr>
+            <td id="menuItem7"></td>
+          </tr>
+          <tr>
+            <td id="menuItem8"></td>
+          </tr>
+          <tr>
+            <td id="menuItem9"></td>
+          </tr>
+          <tr>
+            <td id="menuItem10"></td>
+          </tr>
+        </table>
+      </aside>
+    </td>
+  </tr>
+</table>
+<div class="footer" data-role="footer">
+  <p class="Helvetica" id="infoBar"></p>
+</div>
+
