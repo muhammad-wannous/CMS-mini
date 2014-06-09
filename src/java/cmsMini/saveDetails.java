@@ -79,11 +79,9 @@ public class saveDetails extends HttpServlet {
       Key courseKey = KeyFactory.createKey("tableName", "Course");
       Query courseBasicsQuery = new Query("Course", courseKey);
       List<Entity> dbCourses = datastore.prepare(courseBasicsQuery).asList(FetchOptions.Builder.withDefaults());
-      if (!dbCourses.isEmpty()) {
         while (!dbCourses.isEmpty()) {
-          datastore.delete(dbCourses.get(0).getKey());
+          datastore.delete(dbCourses.remove(0).getKey());
         }
-      }
       Entity courseBasicsEntity = new Entity("Course", courseKey);
       courseBasicsEntity.setProperty("courseID", thisCourse.getCourseID());
       courseBasicsEntity.setProperty("courseTitle", thisCourse.getCourseTitle());
