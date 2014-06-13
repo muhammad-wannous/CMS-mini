@@ -63,7 +63,7 @@ public class createFolders extends HttpServlet {
               .setApplicationName(applicationID).build();
       /*Get a list of all folders in Google Drive.*/
       Drive.Files.List listRequest = serviceDrive.files().list().setQ(
-              "mimeType = 'application/vnd.google-apps.folder");
+              "mimeType = 'application/vnd.google-apps.folder'");
       FileList folderList = listRequest.execute();
       List<File> folders = new ArrayList<>();
       folders.addAll(folderList.getItems());
