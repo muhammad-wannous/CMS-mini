@@ -8,6 +8,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.ParentReference;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -61,7 +62,6 @@ public class saveFile extends HttpServlet {
       System.out.println("saveFile# User, credential, or homeFolder problem!");
       session.setAttribute("infoString", "Not completed!");
     } else {
-      System.out.println("Got all info.");
       Drive serviceDrive = new Drive.Builder(httpTransport, jsonFactory, credential)
               .setApplicationName(applicationID).build();
       if (ServletFileUpload.isMultipartContent(request)) {
@@ -74,7 +74,8 @@ public class saveFile extends HttpServlet {
             File body = new File();
             body.setTitle(file.getName());
             body.setParents(Arrays.asList(new ParentReference().setId(homeFolderId)));
-            InputStreamContent contents = new InputStreamContent(null, file.getInputStream());
+            InputStreamContent contents = new InputStreamContent(null,
+                    new BufferedInputStream(file.getInputStream()));
             contents.setLength(file.getSize());
             Drive.Files.Insert insertRequest = serviceDrive.files().insert(body, contents);
             insertRequest.execute();
