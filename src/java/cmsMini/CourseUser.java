@@ -32,6 +32,8 @@ public class CourseUser {
   private String courseUserSystemRole;
   /*<institutionrole>*/
   private String courseUserInstitutionRole;
+  /*Home folder ID*/
+  private String homeFolderId;
 
   public CourseUser() {
     courseUserID = "";
@@ -46,6 +48,7 @@ public class CourseUser {
     courseUserTel = "";
     courseUserSystemRole = "";
     courseUserInstitutionRole = "";
+    homeFolderId = "";
   }
 
   public String getCourseUserID() {
@@ -143,4 +146,13 @@ public class CourseUser {
   public void setCourseUserInstitutionRole(String courseUserInstitutionRole) {
     this.courseUserInstitutionRole = courseUserInstitutionRole;
   }
+
+  public String getHomeFolderId() {
+    return homeFolderId;
+  }
+
+  public void setHomeFolderId(String homeFolderId) {
+    this.homeFolderId = homeFolderId;
+  }
+  
 }

@@ -55,12 +55,9 @@ public class createFolders extends HttpServlet {
     User thisUser = (User) session.getAttribute("userIn");
     //To invoke this servlet, the user should be an admin and the course details should have been saved.
     if (((thisCourseDetails == null) || (thisCourse == null)
-            || (thisUser == null)) || (!thisUser.getUserRole().endsWith("dmin"))) {
-      if (credential == null) {
-        System.out.println("No credential found in context!");
-      }
+            || (thisUser == null)) || (!thisUser.getUserRole().endsWith("dmin")) || (credential == null)) {
+      System.out.println("createFolders# User or credential problem.");
       session.setAttribute("infoString", "Problem or action not allowed!");
-      response.sendRedirect("home.jsp");
     } else {
       Drive serviceDrive = new Drive.Builder(httpTransport, jsonFactory, credential)
               .setApplicationName(applicationID).build();
@@ -92,7 +89,7 @@ public class createFolders extends HttpServlet {
         }
         if (!ownFolderExists) {
           File contentFolder = new File();
-          contentFolder.setTitle((String)userEntity.getProperty("courseUserID"));
+          contentFolder.setTitle((String) userEntity.getProperty("courseUserID"));
           contentFolder.setDescription("User folder in CMS-mini");
           contentFolder.setMimeType("application/vnd.google-apps.folder");
           contentFolder.setParents(Arrays.asList(new ParentReference().setId("root")));
@@ -100,7 +97,9 @@ public class createFolders extends HttpServlet {
           createFolderInsert.execute().getId();
         }
       }
+      session.setAttribute("infoString", "Folders ready.!");
     }
+    response.sendRedirect("home.jsp");
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

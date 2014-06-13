@@ -56,37 +56,15 @@
               HttpTransport httpTransport = new NetHttpTransport();
               JacksonFactory jsonFactory = new JacksonFactory();
               GoogleCredential credential = (GoogleCredential) application.getAttribute("credential");
-              /*If the credential is not set or timed out then recreate it.*/
-              if (credential == null) {
-                /*Account ID and the key file location are passed in web.xml*/
-                String accountEmail = application.getInitParameter("SERVICE_ACCOUNT_EMAIL");
-                String keyFilePath = application.getInitParameter(
-                        "SERVICE_ACCOUNT_PKCS12_FILE_PATH");
-                /*We get the account ID and KeyFile from Google App Engine console for our project.*/
-                java.io.File keyFile;
-                try {
-                  keyFile = new java.io.File(application.getResource(keyFilePath).toURI());
-                  credential = new GoogleCredential.Builder()
-                          .setTransport(httpTransport)
-                          .setJsonFactory(jsonFactory)
-                          .setServiceAccountId(accountEmail)
-                          .setServiceAccountScopes(Arrays.asList(DriveScopes.DRIVE))
-                          .setServiceAccountPrivateKeyFromP12File(keyFile)
-                          .build();
-                  application.setAttribute("credential", credential);
-                } catch (GeneralSecurityException | URISyntaxException | IOException ex) {
-                  System.out.println("\nError with credentials.");
-                }
-              }
               /*This Servlet will give the admin user a list of the xml files in the shared Google Drive to select
                one from them to import the user information from.*/
               CourseDetails thisCourseDetails = (CourseDetails) application.getAttribute("courseDetails");
               Course thisCourse = (Course) application.getAttribute("courseInfo");
               User thisUser = (User) session.getAttribute("userIn");
-              if (((credential == null) || (thisCourseDetails == null) || (thisCourse == null)
-                      || (thisUser == null)) || (!thisUser.getUserRole().endsWith("dmin"))) {
-                System.out.println("\nError in importContents.");
-                response.sendRedirect("home.jsp");
+              if ((thisCourseDetails == null) || (thisCourse == null)
+                      || (thisUser == null) || (credential == null)) {
+                System.out.println("uploadFile# Credential found in context!");
+                session.setAttribute("infoString", "No credential!");
               } else {
                 /*Prepare a list of the files in the shared Google Drive*/
                 Map<String, String> sharedFiles = new HashMap<>();
