@@ -74,6 +74,7 @@
                 var resourcesTabContents = document.getElementById("contentsTab");
                 <%
                   Course thisCourse = (Course) application.getAttribute("courseInfo");
+                  String contentsFolderName = application.getInitParameter("CONTENTS_FOLDER");
                   User thisUser = (User) session.getAttribute("userIn");
                   if (thisCourse != null) {
                     pageContext.setAttribute("course", thisCourse);
@@ -168,8 +169,33 @@
                 linkElement.appendChild(linkElementText);
                 tempMenuItem.appendChild(linkElement);
                 <%
+                  i++;
+                %>
+                tempMenuItem = document.getElementById("menuItem<%= i%>");
+                tempMenuItem.innerHTML = "Create folders for users!<br>";
+                linkElement = document.createElement("a");
+                linkElementText = document.createTextNode("here!");
+                linkElement.setAttribute("href", "createFolders");
+                linkElement.setAttribute("rel", "external");
+                linkElement.setAttribute("data-ajax", "false");
+                linkElement.appendChild(linkElementText);
+                tempMenuItem.appendChild(linkElement);
+                <%
                     }
                   }
+                  //The following menu-items will be displayed to all users.
+                %>
+                tempMenuItem = document.getElementById("menuItem<%= i%>");
+                tempMenuItem.innerHTML = "Upload a file to my folder!<br>";
+                linkElement = document.createElement("a");
+                linkElementText = document.createTextNode("here!");
+                linkElement.setAttribute("href", "uploadFile.jsp");
+                linkElement.setAttribute("rel", "external");
+                linkElement.setAttribute("data-ajax", "false");
+                linkElement.appendChild(linkElementText);
+                tempMenuItem.appendChild(linkElement);
+                <%
+                  i++;
                   CourseDetails detailsObject = (CourseDetails) application.getAttribute("courseDetails");
                   /*If we have course details in the application context then set the display.*/
                   if (detailsObject != null) {
@@ -250,18 +276,25 @@
                     folders.addAll(foldersList.getItems());
                     if (!folders.isEmpty()) {
                       for (File folder : folders) {
-                        parentsList = folder.getParents();
                         boolean displayB = false;
-                        if (!folder.getShared()) {
-                          if ((parentsList == null) || parentsList.isEmpty()) {
-                            displayB = true;
-                          } else {
+                        //For admin users, show all folders including the shared with us.
+                        //For other users show only the contents folder and their ownes.
+                        if (!thisUser.getUserRole().endsWith("dmin")) {
+                          //Not admin
+                          parentsList = folder.getParents();
+                          if (folder.getSharedWithMeDate() == null) {
                             for (ParentReference parentReference : parentsList) {
-                              if (parentReference.getIsRoot()) {
+                              if (parentReference.getIsRoot()
+                                      && (folder.getTitle().equals(thisUser.getUserID())
+                                      || folder.getTitle().equals(contentsFolderName))) {
                                 displayB = true;
+                                break;
                               }
                             }
                           }
+                        } else {
+                          //Admin
+                          displayB = true;
                         }
                         if (displayB) {
                 %>

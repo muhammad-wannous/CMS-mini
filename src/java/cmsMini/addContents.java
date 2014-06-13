@@ -45,6 +45,7 @@ public class addContents extends HttpServlet {
     HttpSession session = request.getSession();
     Date date = new Date();
     String applicationID = application.getInitParameter("APPLICATION_ID");
+    String contentsFolderName = application.getInitParameter("CONTENTS_FOLDER");
     /*The credential needs HttpTransport, JacksonFactory, account ID, and KeyFile.*/
     HttpTransport httpTransport = new NetHttpTransport();
     JacksonFactory jsonFactory = new JacksonFactory();
@@ -97,7 +98,7 @@ public class addContents extends HttpServlet {
           Drive.Files.List listRequest = service.files().list().setQ(
                   "mimeType = 'application/vnd.google-apps.folder' "
                   + "and trashed != true "
-                  + "and title = '" + selectedFile.substring(0, selectedFile.indexOf(".zip")) + "' ");
+                  + "and title = '" + contentsFolderName + "' ");
           FileList folderList = listRequest.execute();
           String contentFolderId = null;
           if (!folderList.isEmpty()) {
@@ -113,7 +114,7 @@ public class addContents extends HttpServlet {
           }
           if (contentFolderId == null) {
             File contentFolder = new File();
-            contentFolder.setTitle(selectedFile.substring(0, selectedFile.indexOf(".zip")));
+            contentFolder.setTitle(contentsFolderName);
             contentFolder.setDescription("Imported from " + selectedFile + " IMS Contents Packaging 1.1.4");
             contentFolder.setMimeType("application/vnd.google-apps.folder");
             contentFolder.setParents(Arrays.asList(new ParentReference().setId("root")));
