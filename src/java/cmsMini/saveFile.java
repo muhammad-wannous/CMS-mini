@@ -64,6 +64,7 @@ public class saveFile extends HttpServlet {
     } else {
       Drive serviceDrive = new Drive.Builder(httpTransport, jsonFactory, credential)
               .setApplicationName(applicationID).build();
+      System.out.println("The file indicated is: " + request.getParameter("fileToUpload"));
       if (ServletFileUpload.isMultipartContent(request)) {
         System.out.println("Is multipart!");
         ServletFileUpload upload = new ServletFileUpload();

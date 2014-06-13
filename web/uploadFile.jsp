@@ -62,7 +62,7 @@
 
             %>
             <h2 class="Helvetica">Please select a file to upload. (Only PDF files are allowed.)</h2>
-            <form  action="saveFile" id="saveFileForm" method="POST" >
+            <form  enctype="multipart/form-data" action="saveFile" id="saveFileForm" method="POST" >
                 <input type="file" name="fileToUpload" accept="application/pdf">
                 <input type="submit" value="Upload">
             </form>
