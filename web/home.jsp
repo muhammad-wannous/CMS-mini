@@ -185,8 +185,8 @@
                   }
                   String homeFolderId = (String) session.getAttribute("homeFolderId");
                   if (homeFolderId != null && !homeFolderId.equals("")) {
-                  //The following menu-items will be displayed to all users.
-%>
+                    //The following menu-items will be displayed to all users.
+                %>
                 tempMenuItem = document.getElementById("menuItem<%= i%>");
                 tempMenuItem.innerHTML = "Upload a file to my folder!<br>";
                 linkElement = document.createElement("a");
@@ -296,7 +296,14 @@
                             }
                           }
                         } else {
-                          //Admin
+                          //Admin, check if the folder is root.
+                          parentsList = folder.getParents();
+                          for (ParentReference parentReference : parentsList) {
+                            if (parentReference.getIsRoot()) {
+                              displayB = true;
+                              break;
+                            }
+                          }
                           displayB = true;
                         }
                         if (displayB) {
