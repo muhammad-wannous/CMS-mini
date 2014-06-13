@@ -79,7 +79,9 @@ public class createFolders extends HttpServlet {
           List<ParentReference> parentList = folder.getParents();
           for (ParentReference parent : parentList) {
             if (parent.getIsRoot() && folder.getTitle().equals(userEntity.getProperty("courseUserID"))) {
-              
+              datastore.delete(userEntity.getKey());
+              userEntity.setProperty("homeFolderId", folder.getId());
+              datastore.put(userEntity);
               ownFolderExists = true;
               break;
             }
@@ -95,7 +97,9 @@ public class createFolders extends HttpServlet {
           contentFolder.setMimeType("application/vnd.google-apps.folder");
           contentFolder.setParents(Arrays.asList(new ParentReference().setId("root")));
           Drive.Files.Insert createFolderInsert = serviceDrive.files().insert(contentFolder);
-          createFolderInsert.execute().getId();
+          datastore.delete(userEntity.getKey());
+          userEntity.setProperty("homeFolderId", createFolderInsert.execute().getId());
+          datastore.put(userEntity);
         }
       }
       session.setAttribute("infoString", "Folders ready.!");

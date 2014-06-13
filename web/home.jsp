@@ -183,8 +183,10 @@
                 <%
                     }
                   }
+                  String homeFolderId = (String) session.getAttribute("homeFolderId");
+                  if (homeFolderId != null && !homeFolderId.equals("")) {
                   //The following menu-items will be displayed to all users.
-                %>
+%>
                 tempMenuItem = document.getElementById("menuItem<%= i%>");
                 tempMenuItem.innerHTML = "Upload a file to my folder!<br>";
                 linkElement = document.createElement("a");
@@ -195,7 +197,8 @@
                 linkElement.appendChild(linkElementText);
                 tempMenuItem.appendChild(linkElement);
                 <%
-                  i++;
+                    i++;
+                  }
                   CourseDetails detailsObject = (CourseDetails) application.getAttribute("courseDetails");
                   /*If we have course details in the application context then set the display.*/
                   if (detailsObject != null) {

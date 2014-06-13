@@ -47,6 +47,7 @@ public class Validate extends HttpServlet {
     Course thisCourse = (Course) application.getAttribute("courseInfo");
     boolean doneCheck = false;
     User userIn = null;
+    String homeFolderId = "";
     if ((thisCourse != null)
             && (userID != null)
             && !"".equals(userID)
@@ -75,12 +76,14 @@ public class Validate extends HttpServlet {
           Entity userEntity = dbUsers.get(0);
           userIn = new User((String) userEntity.getProperty("courseUserID"),
                   "", (String) userEntity.getProperty("courseUserInstitutionRole"));
+          homeFolderId = (String)userEntity.getProperty("homeFolderId");
           doneCheck = true;
         }
       }
     }
     if (doneCheck) {
       session.setAttribute("userIn", userIn);
+      session.setAttribute("homeFolderId", homeFolderId);
       session.setAttribute("infoString", "User in!");
     } else {
       session.setAttribute("infoString", "Problem in authentication!");

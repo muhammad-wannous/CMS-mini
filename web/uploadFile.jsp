@@ -49,63 +49,24 @@
             </div>
             <hr class="wide">
             <%
-              String applicationID = application.getInitParameter("APPLICATION_ID");
-              /*The xml file containing the course and instructor information is saved in a folder
-               that is shared with us on Google Drive.*/
-              /*The credential needs HttpTransport, JacksonFactory, account ID, and KeyFile.*/
-              HttpTransport httpTransport = new NetHttpTransport();
-              JacksonFactory jsonFactory = new JacksonFactory();
-              GoogleCredential credential = (GoogleCredential) application.getAttribute("credential");
-              /*This Servlet will give the admin user a list of the xml files in the shared Google Drive to select
-               one from them to import the user information from.*/
               CourseDetails thisCourseDetails = (CourseDetails) application.getAttribute("courseDetails");
               Course thisCourse = (Course) application.getAttribute("courseInfo");
               User thisUser = (User) session.getAttribute("userIn");
+              String homeFolderId = (String) session.getAttribute("homeFolderId");
               if ((thisCourseDetails == null) || (thisCourse == null)
-                      || (thisUser == null) || (credential == null)) {
-                System.out.println("uploadFile# Credential found in context!");
+                      || (thisUser == null)
+                      || (homeFolderId == null) || homeFolderId.equals("")) {
+                System.out.println("uploadFile# No credential found in context or home folder!");
                 session.setAttribute("infoString", "No credential!");
               } else {
-                /*Prepare a list of the files in the shared Google Drive*/
-                Map<String, String> sharedFiles = new HashMap<>();
-                Drive service = new Drive.Builder(httpTransport, jsonFactory, credential)
-                        .setApplicationName(applicationID).build();
-                /*Get the information of the folder shared with us.*/
-                Drive.Files.List listRequest = service.files().list().setQ(
-                        "mimeType != 'application/vnd.google-apps.folder' "
-                        + "and sharedWithMe "
-                        + "and trashed = false");
 
-                FileList fileList = listRequest.execute();
-                List<File> files = new ArrayList<>();
-                files.addAll(fileList.getItems());
-                if (!files.isEmpty()) {
-                  /*Add all files to the Map.*/
-                  for (File file : files) {
-                    if (file.getTitle().endsWith(".zip")
-                            && file.getDownloadUrl() != null
-                            && file.getDownloadUrl().length() > 0) {
-                      sharedFiles.put(file.getTitle(), file.getDownloadUrl());
-                    }
-                  }
-                  session.setAttribute("sharedContentFiles", sharedFiles);
-                }
             %>
-            <h2 class="Helvetica">Please select a file from the list below to import users from.</h2>
-            <form  action="addContents" id="addContentsForm" method="POST" >
-                <select data-role="none" id="filesList" name="selectedContentFile">
-
-                    <%
-                      for (String sharedFileName : sharedFiles.keySet()) {
-                    %>
-                    <option data-role="none" value="<%=sharedFileName%>"><%=sharedFileName%></option>
-                    <%
-                      }
-                    %>
-                </select>
-                <input data-role="none" type="submit" value="Submit"/>
+            <h2 class="Helvetica">Please select a file to upload. (Only PDF files are allowed.)</h2>
+            <form  action="saveFile" id="saveFileForm" method="POST" >
+                <input type="file" name="fileToUpload" accept="application/pdf">
+                <input type="submit" value="Upload">
             </form>
-            <%
+            <%              
               }
             %>
         </div>
