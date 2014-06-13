@@ -79,6 +79,7 @@ public class createFolders extends HttpServlet {
           List<ParentReference> parentList = folder.getParents();
           for (ParentReference parent : parentList) {
             if (parent.getIsRoot() && folder.getTitle().equals(userEntity.getProperty("courseUserID"))) {
+              
               ownFolderExists = true;
               break;
             }
