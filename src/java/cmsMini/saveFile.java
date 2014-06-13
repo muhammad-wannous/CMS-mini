@@ -2,20 +2,31 @@ package cmsMini;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.ParentReference;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
- * @MultipartConfig
  * @author Muhammad Wannous
  *
+ */
+/**
+ * @MultipartConfig(fileSizeThreshold=1024*1024*2, maxFileSize=1024*1024*2, maxRequestSize=1024*1024*4)
  */
 public class saveFile extends HttpServlet {
 
@@ -50,7 +61,25 @@ public class saveFile extends HttpServlet {
       System.out.println("saveFile# User, credential, or homeFolder problem!");
       session.setAttribute("infoString", "Not completed!");
     } else {
-
+      Drive serviceDrive = new Drive.Builder(httpTransport, jsonFactory, credential)
+              .setApplicationName(applicationID).build();
+      if (ServletFileUpload.isMultipartContent(request)) {
+        ServletFileUpload upload = new ServletFileUpload();
+        try {
+          List<FileItem> allFiles = upload.parseRequest(request);
+          for (FileItem file : allFiles) {
+            File body = new File();
+            body.setTitle(file.getName());
+            body.setParents(Arrays.asList(new ParentReference().setId(homeFolderId)));
+            InputStreamContent contents = new InputStreamContent(null, file.getInputStream());
+            Drive.Files.Insert insertRequest = serviceDrive.files().insert(body, contents);
+            insertRequest.execute();
+          }
+          session.setAttribute("infoString", "Upload completed!");
+        } catch (FileUploadException ex) {
+          ex.printStackTrace(System.out);
+        }
+      }
     }
     response.sendRedirect("home.jsp");
   }
