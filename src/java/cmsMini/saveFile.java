@@ -73,7 +73,6 @@ public class saveFile extends HttpServlet {
             body.setParents(Arrays.asList(new ParentReference().setId(homeFolderId)));
             InputStreamContent contents = new InputStreamContent(null, file.getInputStream());
             contents.setLength(file.getSize());
-            contents.setCloseInputStream(true);
             Drive.Files.Insert insertRequest = serviceDrive.files().insert(body, contents);
             insertRequest.execute();
           }

@@ -304,7 +304,6 @@
                               break;
                             }
                           }
-                          displayB = true;
                         }
                         if (displayB) {
                 %>
