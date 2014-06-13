@@ -61,19 +61,21 @@ public class saveFile extends HttpServlet {
       System.out.println("saveFile# User, credential, or homeFolder problem!");
       session.setAttribute("infoString", "Not completed!");
     } else {
+      System.out.println("Got all info.");
       Drive serviceDrive = new Drive.Builder(httpTransport, jsonFactory, credential)
               .setApplicationName(applicationID).build();
       if (ServletFileUpload.isMultipartContent(request)) {
+        System.out.println("Is multipart!");
         ServletFileUpload upload = new ServletFileUpload();
         try {
           List<FileItem> allFiles = upload.parseRequest(request);
           for (FileItem file : allFiles) {
+            System.out.println("There are files: " + file.getName());
             File body = new File();
             body.setTitle(file.getName());
             body.setParents(Arrays.asList(new ParentReference().setId(homeFolderId)));
             InputStreamContent contents = new InputStreamContent(null, file.getInputStream());
             contents.setLength(file.getSize());
-            contents.setCloseInputStream(false);
             Drive.Files.Insert insertRequest = serviceDrive.files().insert(body, contents);
             insertRequest.execute();
           }
