@@ -67,28 +67,29 @@ public class saveFile extends HttpServlet {
       Drive serviceDrive = new Drive.Builder(httpTransport, jsonFactory, credential)
               .setApplicationName(applicationID).build();
       if (ServletFileUpload.isMultipartContent(request)) {
-        System.out.println("Is multipart!");
+//        System.out.println("Is multipart!");
         ServletFileUpload upload = new ServletFileUpload();
         try {
           FileItemIterator fileItemIterator = upload.getItemIterator(request);
-          while(fileItemIterator.hasNext()){
-              FileItemStream fileItem = fileItemIterator.next();
+          while (fileItemIterator.hasNext()) {
+            FileItemStream fileItem = fileItemIterator.next();
 //              System.out.println("There is a file: " + fileItem.getName());
 //              System.out.println("File type: "
 //                    + fileItem.getName().substring(fileItem.getName().lastIndexOf(".")));
-              if(fileItem.getName().substring(fileItem.getName().lastIndexOf(".")).equalsIgnoreCase(".pdf")){
-                File body = new File();
+            if (fileItem.getName().substring(fileItem.getName().lastIndexOf(".")).equalsIgnoreCase(".pdf")) {
+              File body = new File();
               body.setTitle(fileItem.getName());
               body.setParents(Arrays.asList(new ParentReference().setId(homeFolderId)));
               InputStreamContent contents = new InputStreamContent(null,
                       new BufferedInputStream(fileItem.openStream()));
               Drive.Files.Insert insertRequest = serviceDrive.files().insert(body, contents);
               insertRequest.execute();
-              }
+            }
           }
           session.setAttribute("infoString", "Upload completed!");
         } catch (FileUploadException ex) {
           ex.printStackTrace(System.out);
+          session.setAttribute("infoString", "Not completed!");
         }
       }
     }
