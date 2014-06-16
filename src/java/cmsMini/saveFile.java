@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -64,22 +66,25 @@ public class saveFile extends HttpServlet {
     } else {
       Drive serviceDrive = new Drive.Builder(httpTransport, jsonFactory, credential)
               .setApplicationName(applicationID).build();
-      System.out.println("The file indicated is: " + request.getParameter("fileToUpload"));
       if (ServletFileUpload.isMultipartContent(request)) {
         System.out.println("Is multipart!");
         ServletFileUpload upload = new ServletFileUpload();
         try {
-          List<FileItem> allFiles = upload.parseRequest(request);
-          for (FileItem file : allFiles) {
-            System.out.println("There are files: " + file.getName());
-            File body = new File();
-            body.setTitle(file.getName());
-            body.setParents(Arrays.asList(new ParentReference().setId(homeFolderId)));
-            InputStreamContent contents = new InputStreamContent(null,
-                    new BufferedInputStream(file.getInputStream()));
-            contents.setLength(file.getSize());
-            Drive.Files.Insert insertRequest = serviceDrive.files().insert(body, contents);
-            insertRequest.execute();
+          FileItemIterator fileItemIterator = upload.getItemIterator(request);
+          while(fileItemIterator.hasNext()){
+              FileItemStream fileItem = fileItemIterator.next();
+//              System.out.println("There is a file: " + fileItem.getName());
+//              System.out.println("File type: "
+//                    + fileItem.getName().substring(fileItem.getName().lastIndexOf(".")));
+              if(fileItem.getName().substring(fileItem.getName().lastIndexOf(".")).equalsIgnoreCase(".pdf")){
+                File body = new File();
+              body.setTitle(fileItem.getName());
+              body.setParents(Arrays.asList(new ParentReference().setId(homeFolderId)));
+              InputStreamContent contents = new InputStreamContent(null,
+                      new BufferedInputStream(fileItem.openStream()));
+              Drive.Files.Insert insertRequest = serviceDrive.files().insert(body, contents);
+              insertRequest.execute();
+              }
           }
           session.setAttribute("infoString", "Upload completed!");
         } catch (FileUploadException ex) {

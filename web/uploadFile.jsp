@@ -61,8 +61,12 @@
               } else {
 
             %>
-            <h2 class="Helvetica">Please select a file to upload. (Only PDF files are allowed.)</h2>
-            <form  enctype="multipart/form-data" action="saveFile" id="saveFileForm" method="POST" >
+            <h2 class="Helvetica">Please select a file to upload.</h2>
+            <ul>
+                <li>Only PDF files will be accepted.</li>
+                <li>You can't delete what you have uploaded.</li>
+            </ul>
+            <form  data-ajax="false" enctype="multipart/form-data" action="saveFile" id="saveFileForm" method="POST" >
                 <input type="file" name="fileToUpload" accept="application/pdf">
                 <input type="submit" value="Upload">
             </form>
