@@ -1,4 +1,3 @@
-
 package cmsMini;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -8,6 +7,11 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,10 +62,10 @@ public class download extends HttpServlet {
       HttpResponse fileHttpResponse
               = serviceDrive.getRequestFactory().buildGetRequest(new GenericUrl(filesInfo.get(fileIdString)[2]))
               .execute();
-      InputStream downloaInputStream = fileHttpResponse.getContent();
+      InputStream downloadInputStream = fileHttpResponse.getContent();
       byte[] byteBuffer = new byte[4096];
       ServletOutputStream outStream;
-      try (DataInputStream in = new DataInputStream(downloaInputStream)) {
+      try (DataInputStream in = new DataInputStream(downloadInputStream)) {
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + filesInfo.get(fileIdString)[0] + "\"");
         int length = 0;
@@ -71,6 +75,14 @@ public class download extends HttpServlet {
         }
       }
       outStream.close();
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Key logKey = KeyFactory.createKey("tableName", "Log");
+      Entity logEntity = new Entity("Log", logKey);
+      logEntity.setProperty("Action", "Download");
+      logEntity.setProperty("User", thisUser.getUserID());
+      logEntity.setProperty("File", filesInfo.get(fileIdString)[0]);
+      logEntity.setProperty("Time", (new java.util.Date()).toString());
+      datastore.put(logEntity);
     }
   }
 

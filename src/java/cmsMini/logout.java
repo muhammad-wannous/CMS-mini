@@ -2,6 +2,8 @@
 package cmsMini;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +27,13 @@ public class logout extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     HttpSession session = request.getSession();
+    ServletContext application = this.getServletContext();
+    ArrayList<String> usersInList = (ArrayList<String>) application.getAttribute("usersInList");
+    User userIn = (User)session.getAttribute("userIn");
+    if(userIn != null && usersInList != null){
+      usersInList.remove(userIn.getUserID());
+      application.setAttribute("usersInList", usersInList);
+    }
     session.setAttribute("userIn", null);
     session.invalidate();
     response.sendRedirect("home.jsp");

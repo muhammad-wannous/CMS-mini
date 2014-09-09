@@ -181,12 +181,25 @@
                 linkElement.appendChild(linkElementText);
                 tempMenuItem.appendChild(linkElement);
                 <%
+                  i++;
+                %>
+                tempMenuItem = document.getElementById("menuItem<%= i%>");
+                tempMenuItem.innerHTML = "Enable credentials for Android App!<br>";
+                linkElement = document.createElement("a");
+                linkElementText = document.createTextNode("here!");
+                linkElement.setAttribute("href", "enableAndroid");
+                linkElement.setAttribute("rel", "external");
+                linkElement.setAttribute("data-ajax", "false");
+                linkElement.appendChild(linkElementText);
+                tempMenuItem.appendChild(linkElement);
+                <%
+                      i++;
                     }
                   }
                   String homeFolderId = (String) session.getAttribute("homeFolderId");
                   if (homeFolderId != null && !homeFolderId.equals("")) {
                     //The following menu-items will be displayed to all users.
-                %>
+%>
                 tempMenuItem = document.getElementById("menuItem<%= i%>");
                 tempMenuItem.innerHTML = "Upload a file to my folder!<br>";
                 linkElement = document.createElement("a");
@@ -199,6 +212,12 @@
                 <%
                     i++;
                   }
+                %>
+                    <%--Add Calendar--%>
+                tempMenuItem = document.getElementById("menuItem<%= i%>");
+                tempMenuItem.innerHTML = "<iframe src=\"https://www.google.com/calendar/embed?showNav=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;height=240&amp;wkst=7&amp;bgcolor=%23FFFFFF&amp;src=a63ish4fkfi4de2j05qdi3mbu4%40group.calendar.google.com&amp;color=%23875509&amp;ctz=Asia%2FDamascus\" style=\" border:solid 1px #777 \" width=\"320\" height=\"240\" frameborder=\"0\" scrolling=\"no\"></iframe>";
+                <%
+                  i++;
                   CourseDetails detailsObject = (CourseDetails) application.getAttribute("courseDetails");
                   /*If we have course details in the application context then set the display.*/
                   if (detailsObject != null) {
@@ -331,7 +350,7 @@
                   for (File file : files) {
                     parentsList = file.getParents();
                     boolean displayB = false;
-                    if (!file.getShared()) {
+                    if (file.getSharedWithMeDate() == null) {
                       if (parentsList == null) {
                         displayB = true;
                       } else {
@@ -662,6 +681,9 @@
         application.setAttribute("courseDetails", courseDetails);
       }
     }
+    /*A list of users who are currently logged in*/
+    ArrayList<String> usersInList = new ArrayList<>();
+    application.setAttribute("usersInList", usersInList);
   }
 %>
 <%!

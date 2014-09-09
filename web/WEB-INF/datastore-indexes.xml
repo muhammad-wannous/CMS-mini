@@ -5,4 +5,5 @@
     <datastore-index kind="Admin" ancestor="true"></datastore-index>
     <datastore-index kind="User" ancestor="true"></datastore-index>
     <datastore-index kind="Details" ancestor="true"></datastore-index>
+    <datastore-index kind="Log" ancestor="true"></datastore-index>
 </datastore-indexes>

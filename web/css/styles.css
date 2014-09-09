@@ -59,13 +59,13 @@ td.hiddenRightAlignment
 }
 td.menu
 {
-    width: 25%;
+    width: 35%;
     vertical-align: top;
     text-indent: 20%;
 }
 td.body
 {
-    width: 75%;
+    width: 65%;
 }
 hr.wide
 {

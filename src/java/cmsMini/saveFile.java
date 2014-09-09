@@ -8,6 +8,11 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.ParentReference;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,9 +31,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * @author Muhammad Wannous
  *
  */
-/**
- * @MultipartConfig(fileSizeThreshold=1024*1024*2, maxFileSize=1024*1024*2, maxRequestSize=1024*1024*4)
- */
 public class saveFile extends HttpServlet {
 
   /**
@@ -44,9 +46,7 @@ public class saveFile extends HttpServlet {
     ServletContext application = this.getServletContext();
     HttpSession session = request.getSession(true);
     String applicationID = application.getInitParameter("APPLICATION_ID");
-    /*The xml file containing the course and instructor information is saved in a folder
-     that is shared with us on Google Drive.*/
-    /*The credential needs HttpTransport, JacksonFactory, account ID, and KeyFile.*/
+
     HttpTransport httpTransport = new NetHttpTransport();
     JacksonFactory jsonFactory = new JacksonFactory();
     GoogleCredential credential = (GoogleCredential) application.getAttribute("credential");
@@ -67,6 +67,8 @@ public class saveFile extends HttpServlet {
       if (ServletFileUpload.isMultipartContent(request)) {
 //        System.out.println("Is multipart!");
         ServletFileUpload upload = new ServletFileUpload();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Key logKey = KeyFactory.createKey("tableName", "Log");
         try {
           FileItemIterator fileItemIterator = upload.getItemIterator(request);
           while (fileItemIterator.hasNext()) {
@@ -82,6 +84,12 @@ public class saveFile extends HttpServlet {
                       new BufferedInputStream(fileItem.openStream()));
               Drive.Files.Insert insertRequest = serviceDrive.files().insert(body, contents);
               insertRequest.execute();
+              Entity logEntity = new Entity("Log", logKey);
+              logEntity.setProperty("Action", "Upload");
+              logEntity.setProperty("User", thisUser.getUserID());
+              logEntity.setProperty("File", fileItem.getName());
+              logEntity.setProperty("Time", (new java.util.Date()).toString());
+              datastore.put(logEntity);
             }
           }
           session.setAttribute("infoString", "Upload completed!");
