@@ -95,7 +95,6 @@
                 /*Get the information of the files shared with us.*/
                 Drive.Files.List listRequest = service.files().list().setQ(
                         "mimeType != 'application/vnd.google-apps.folder' "
-                        + "and sharedWithMe = true "
                         + "and trashed = false");
 
                 FileList fileList = listRequest.execute();

@@ -215,7 +215,7 @@
                 %>
                     <%--Add Calendar--%>
                 tempMenuItem = document.getElementById("menuItem<%= i%>");
-                tempMenuItem.innerHTML = "<iframe src=\"https://www.google.com/calendar/embed?showNav=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;height=240&amp;wkst=7&amp;bgcolor=%23FFFFFF&amp;src=a63ish4fkfi4de2j05qdi3mbu4%40group.calendar.google.com&amp;color=%23875509&amp;ctz=Asia%2FDamascus\" style=\" border:solid 1px #777 \" width=\"320\" height=\"240\" frameborder=\"0\" scrolling=\"no\"></iframe>";
+                tempMenuItem.innerHTML = '<iframe src="https://www.google.com/calendar/embed?showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;height=240&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=a63ish4fkfi4de2j05qdi3mbu4%40group.calendar.google.com&amp;color=%23875509&amp;ctz=Asia%2FDamascus" style=" border:solid 1px #777 " width="320" height="240" frameborder="0" scrolling="no"></iframe>';
                 <%
                   i++;
                   CourseDetails detailsObject = (CourseDetails) application.getAttribute("courseDetails");

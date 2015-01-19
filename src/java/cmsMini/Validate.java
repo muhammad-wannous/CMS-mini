@@ -56,22 +56,33 @@ public class Validate extends HttpServlet {
 //        }
 //        System.out.println("UserID=" + userID);
         /*If the course data has already been parsed and saved into the Datastore then we might find the user there.*/
-          DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-          Key userKey = KeyFactory.createKey("tableName", "User");
-          Query userQuery = new Query("User", userKey);
-          Filter nameFilter = new Query.FilterPredicate("courseUserID", Query.FilterOperator.EQUAL, userID);
-          Filter secretFilter = new Query.FilterPredicate("courseUserPassword",
-                  Query.FilterOperator.EQUAL, userSecret);
-          Filter nameSecretFilter = Query.CompositeFilterOperator.and(nameFilter, secretFilter);
-          userQuery.setFilter(nameSecretFilter);
-          List<Entity> dbUsers = datastore.prepare(userQuery).asList(FetchOptions.Builder.withDefaults());
-          if (!dbUsers.isEmpty()) {
-            Entity userEntity = dbUsers.get(0);
-            userIn = new User((String) userEntity.getProperty("courseUserID"),
-                    "", (String) userEntity.getProperty("courseUserSystemRole"));
-            homeFolderId = (String) userEntity.getProperty("homeFolderId");
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Key userKey = KeyFactory.createKey("tableName", "User");
+        Query userQuery = new Query("User", userKey);
+        Filter nameFilter = new Query.FilterPredicate("courseUserID", Query.FilterOperator.EQUAL, userID);
+        Filter secretFilter = new Query.FilterPredicate("courseUserPassword",
+                Query.FilterOperator.EQUAL, userSecret);
+        Filter nameSecretFilter = Query.CompositeFilterOperator.and(nameFilter, secretFilter);
+        userQuery.setFilter(nameSecretFilter);
+        List<Entity> dbUsers = datastore.prepare(userQuery).asList(FetchOptions.Builder.withDefaults());
+        if (!dbUsers.isEmpty()) {
+          Entity userEntity = dbUsers.get(0);
+          userIn = new User((String) userEntity.getProperty("courseUserID"),
+                  "", (String) userEntity.getProperty("courseUserSystemRole"));
+          homeFolderId = (String) userEntity.getProperty("homeFolderId");
+          doneCheck = true;
+        }
+        //Last chance, user is Admin accessing the system for the first time!!
+        if (!doneCheck) {
+          User adminUser = (User) application.getAttribute("adminInfo");
+          if (adminUser != null
+                  && userID.equals(adminUser.getUserID())
+                  && userSecret.equalsIgnoreCase(adminUser.getUserMD5Pass())) {
+            userIn = new User((userID), "", adminUser.getUserRole());
+            homeFolderId = "";
             doneCheck = true;
           }
+        }
         if (doneCheck) {
           session.setAttribute("userIn", userIn);
           session.setAttribute("homeFolderId", homeFolderId);

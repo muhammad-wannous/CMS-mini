@@ -81,16 +81,13 @@ public class parseDetails extends HttpServlet {
     if ((thisCourse != null) && (thisUser != null)
             && (thisUser.getUserRole().endsWith("dmin"))) {
       String applicationID = application.getInitParameter("APPLICATION_ID");
-      /*The xml file containing the course and instructor information is saved in a folder
-       that is shared with us on Google Drive. The name of the folder is passed in web.xml*/
-      String infoFolder = application.getInitParameter("INFO_FOLDER");
       try {
         Drive service = new Drive.Builder(httpTransport, jsonFactory, credential)
                 .setApplicationName(applicationID).build();
         /*Get the information of the folder shared with us. Its name should be already known to us.*/
+        /*Keep it as mimeType != 'application/vnd.google-apps.folder' the option mimeType = 'application/vnd.google-apps.file' did not work.*/
         Drive.Files.List listRequest = service.files().list().setQ(
-                "mimeType != 'application/vnd.google-apps.file'"
-                + "and sharedWithMe = true "
+                "mimeType != 'application/vnd.google-apps.folder' "
                 + "and title = '" + thisCourse.getCourseDescriptionFile() + "'");
         FileList list = listRequest.execute();
         List<File> files = new ArrayList<>();
@@ -312,7 +309,7 @@ public class parseDetails extends HttpServlet {
       application.setAttribute("courseDetails", thisCourseDetails);
       session.setAttribute("infoString", "Details parsed!");
     } else {
-      session.setAttribute("infoString", "Details not parsed successfulyÏ!");
+      session.setAttribute("infoString", "Details not parsed successfuly!");
     }
     response.sendRedirect("home.jsp");
   }

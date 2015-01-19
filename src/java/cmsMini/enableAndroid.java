@@ -8,6 +8,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 import com.google.api.services.drive.model.Property;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -21,6 +22,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -102,6 +104,13 @@ public class enableAndroid extends HttpServlet {
       InputStreamContent content = new InputStreamContent("text/plain",
               new BufferedInputStream(IOUtils.toInputStream(textContents)));
       body = service.files().insert(body, content).execute();
+//      Drive.Files.List listRequest = service.files().list().setQ(
+//              "mimeType = 'application/vnd.google-apps.folder' "
+//              + "and trashed = false");
+//
+//      FileList folderList = listRequest.execute();
+//      List<File> folders = new ArrayList<>();
+//      folders.addAll(folderList.getItems());
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       Key userKey = KeyFactory.createKey("tableName", "User");
       Query userQuery = new Query("User", userKey);
@@ -110,9 +119,15 @@ public class enableAndroid extends HttpServlet {
       for (Entity userEntity : dbUsers) {
         newProperty = new Property();
         newProperty.setKey((String) userEntity.getProperty("courseUserID"));
+//            newProperty.setKey("secKey");
         newProperty.setValue((String) userEntity.getProperty("courseUserPassword"));
         newProperty.setVisibility("PRIVATE");
         service.properties().insert(body.getId(), newProperty).execute();
+//        for (File folder : folders) {
+//          if(((String)userEntity.getProperty("courseUserID")).equals(folder.getTitle())){
+//            service.properties().insert(folder.getId(), newProperty).execute();
+//          }
+//        }
       }
       session.setAttribute("infoString", "Credentials added for Android App!");
     }
