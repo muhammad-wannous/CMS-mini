@@ -1,5 +1,5 @@
 <%-- 
-    Document   : addUser
+    Document   : importContents.jsp
     Created on : Mar 13, 2014, 4:44:27 PM
     Author     : Muhammad Wannous
 --%>
@@ -50,8 +50,6 @@
             <hr class="wide">
             <%
               String applicationID = application.getInitParameter("APPLICATION_ID");
-              /*The xml file containing the course and instructor information is saved in a folder
-               that is shared with us on Google Drive.*/
               /*The credential needs HttpTransport, JacksonFactory, account ID, and KeyFile.*/
               HttpTransport httpTransport = new NetHttpTransport();
               JacksonFactory jsonFactory = new JacksonFactory();

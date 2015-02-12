@@ -14,7 +14,6 @@ import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
@@ -43,7 +42,6 @@ public class addContents extends HttpServlet {
           throws ServletException, IOException, URISyntaxException {
     ServletContext application = this.getServletContext();
     HttpSession session = request.getSession();
-    Date date = new Date();
     String applicationID = application.getInitParameter("APPLICATION_ID");
     String contentsFolderName = application.getInitParameter("CONTENTS_FOLDER");
     /*The credential needs HttpTransport, JacksonFactory, account ID, and KeyFile.*/
@@ -133,7 +131,7 @@ public class addContents extends HttpServlet {
         throw new ServletException(ex);
       }
     }
-    response.sendRedirect("home.jsp?ts=" + date.toString());
+    response.sendRedirect("home.jsp");
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
