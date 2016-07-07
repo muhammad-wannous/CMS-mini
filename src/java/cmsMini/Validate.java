@@ -90,7 +90,7 @@ public class Validate extends HttpServlet {
           usersInList.add(userID);
           application.setAttribute("usersInList", usersInList);
         } else {
-          System.out.println("A use with ID=" + userID + " and secret=" + userSecret + " tried to log in!!");
+          System.out.println("A user with ID=" + userID + " and secret=" + userSecret + " tried to log in!!");
           session.setAttribute("infoString", "Problem in authentication!");
         }
       } else {

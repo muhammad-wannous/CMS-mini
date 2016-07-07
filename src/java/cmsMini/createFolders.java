@@ -46,6 +46,7 @@ public class createFolders extends HttpServlet {
     ServletContext application = this.getServletContext();
     HttpSession session = request.getSession();
     String applicationID = application.getInitParameter("APPLICATION_ID");
+    String contentsFolderName = application.getInitParameter("CONTENTS_FOLDER");
     GoogleCredential credential = (GoogleCredential) application.getAttribute("credential");
     HttpTransport httpTransport = new NetHttpTransport();
     JacksonFactory jsonFactory = new JacksonFactory();
@@ -77,7 +78,10 @@ public class createFolders extends HttpServlet {
         for (File folder : folders) {
           List<ParentReference> parentList = folder.getParents();
           for (ParentReference parent : parentList) {
-            if (parent.getIsRoot() && folder.getTitle().equals(userEntity.getProperty("courseUserID"))) {
+            //The contents folder is the home folder of the Admin users.
+            //Other users have their own home folders.
+            if (parent.getIsRoot()
+                    && ((folder.getTitle().equals(contentsFolderName) && ((String) userEntity.getProperty("courseUserSystemRole")).endsWith("dmin")) || folder.getTitle().equals(userEntity.getProperty("courseUserID")))) {
               datastore.delete(userEntity.getKey());
               userEntity.setProperty("homeFolderId", folder.getId());
               datastore.put(userEntity);
