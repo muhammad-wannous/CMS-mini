@@ -93,7 +93,6 @@
                 /*Get the information of the folder shared with us.*/
                 Drive.Files.List listRequest = service.files().list().setQ(
                         "mimeType != 'application/vnd.google-apps.folder' "
-                        + "and sharedWithMe "
                         + "and trashed = false");
 
                 FileList fileList = listRequest.execute();
@@ -111,7 +110,7 @@
                   session.setAttribute("sharedContentFiles", sharedFiles);
                 }
             %>
-            <h2 class="Helvetica">Please select a file from the list below to import users from.</h2>
+            <h2 class="Helvetica">Please select a file from the list below to import contents from.</h2>
             <form  action="addContents" id="addContentsForm" method="POST" >
                 <select data-role="none" id="filesList" name="selectedContentFile">
 
